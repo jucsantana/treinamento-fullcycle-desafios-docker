@@ -1,0 +1,10 @@
+FROM golang:1.7.3 AS builder
+RUN go get -d -v golang.org/x/net/html && mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY data .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+
+FROM scratch
+WORKDIR /root/
+COPY --from=builder /usr/src/app .
+CMD ["./app"]
