@@ -9,9 +9,6 @@ services:
     container_name: nginx
     ports:
       - 8080:80
-    networks:
-      frontend:
-        ipv4_address: 172.24.2.4
     depends_on:
       - app
       
@@ -22,12 +19,7 @@ services:
     container_name: app
     entrypoint: dockerize -wait tcp://db:3306 docker-entrypoint.sh
     command: node index.js
-    networks:
-      frontend:
-        ipv4_address: 172.24.2.3
     tty: true
-    ports:
-      - 3000:3000
     depends_on:
       - db
 
@@ -43,19 +35,8 @@ services:
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root  
-      
-    networks:
-      frontend:
-        ipv4_address: 172.24.2.2
 
 
-networks:
-  frontend:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-       - subnet: 172.24.2.0/16
 
 
     
